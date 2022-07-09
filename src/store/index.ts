@@ -1,9 +1,6 @@
 import { createStore } from "vuex";
+import { heroes } from "./modules/heroes";
 
 export default createStore({
-  state: {},
-  getters: {},
-  mutations: {},
-  actions: {},
-  modules: {},
+  modules: { heroes },
 });

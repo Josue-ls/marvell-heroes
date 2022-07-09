@@ -5,14 +5,12 @@
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent } from "vue";
-import HelloWorld from "@/components/HelloWorld.vue"; // @ is an alias to /src
+<script lang="ts" setup>
+import { computed } from "vue";
+import store from "@/store";
+import HelloWorld from "@/components/HelloWorld.vue";
 
-export default defineComponent({
-  name: "HomeView",
-  components: {
-    HelloWorld,
-  },
-});
+store.dispatch("heroes/fetchHeroes");
+const heroes = computed(() => store.getters["heroes/getHeroes"]);
+console.log(heroes.value);
 </script>
