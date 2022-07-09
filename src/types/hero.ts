@@ -2,7 +2,7 @@ export interface Heroes {
   data: Array<Hero>;
 }
 
-interface Hero {
+export interface Hero {
   comics: CommonObject;
   description: string;
   events: CommonObject;
