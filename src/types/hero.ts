@@ -12,7 +12,7 @@ export interface Hero {
   resourceURI: string;
   series: CommonObject;
   stories: CommonObject;
-  thumbnail: unknown;
+  thumbnail: Image;
   urls: Array<unknown>;
 }
 
@@ -21,4 +21,9 @@ interface CommonObject {
   collectionURI: string;
   items: Array<unknown>;
   returned: number;
+}
+
+interface Image {
+  path: string;
+  extension: string;
 }
