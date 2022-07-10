@@ -1,9 +1,11 @@
 <template>
-  <div class="modal fade" id="currentHero">
+  <div class="modal fade" :id="props.idModal">
     <div class="modal-dialog modal-lg">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+          <h5 class="modal-title" id="exampleModalLabel">
+            {{ props.titleModal ?? "Title" }}
+          </h5>
           <button
             type="button"
             class="btn-close"
@@ -17,11 +19,17 @@
   </div>
 </template>
 
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import { defineProps } from "vue";
+
+const props = defineProps<{
+  idModal: string;
+  titleModal: string;
+}>();
+</script>
 
 <style lang="scss" scoped>
 .size-body {
   min-height: 50rem;
-  padding-left: 20%;
 }
 </style>

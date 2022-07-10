@@ -1,5 +1,5 @@
 <template>
-  <div class="container margin-row" ref="scrollComponent">
+  <div class="container margin-row">
     <template v-for="item in heroList" :key="item.id">
       <div class="row">
         <template v-for="hero in item.data" :key="hero.id">
@@ -9,13 +9,24 @@
         </template>
       </div>
     </template>
+    <div v-if="isLoading" class="spinner-border mb-4" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
   </div>
+  <modal-component id-modal="updateHero" title-modal="Editar Heroe">
+    <form-heroes />
+  </modal-component>
 </template>
 
 <script lang="ts" setup>
 import store from "@/store";
-import { computed, onMounted } from "vue";
+import { computed, onMounted, ref, watch } from "vue";
 import UiCard from "./utils/Card/UiCard.vue";
+import ModalComponent from "@/components/utils/ModalComponent.vue";
+import FormHeroes from "@/components/FormHeroes.vue";
+
+const isLoading = ref<boolean>(true);
+const isScroll = ref<boolean>(true);
 
 onMounted(() => {
   fetchHeroes();
@@ -36,6 +47,11 @@ const heroList = computed(() => {
   return newArray;
 });
 
+watch(heroList, () => {
+  isLoading.value = false;
+  isScroll.value = true;
+});
+
 function fetchHeroes() {
   store.dispatch("heroes/fetchHeroes");
 }
@@ -47,7 +63,9 @@ function infiniteScroll() {
       document.documentElement.offsetHeight;
 
     if (bottomOfWindow) {
-      fetchHeroes();
+      isLoading.value = true;
+      isScroll.value && fetchHeroes();
+      isScroll.value = false;
     }
   };
 }
@@ -61,6 +79,10 @@ function infiniteScroll() {
 
   &:not(:first-child) {
     margin-bottom: 5rem;
+  }
+
+  &:last-child {
+    margin-bottom: 2rem;
   }
 }
 </style>

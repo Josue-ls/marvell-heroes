@@ -3,31 +3,37 @@
     <div class="container-fluid">
       <a class="navbar-brand text-light" href="#">Navbar</a>
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul class="navbar-nav me-auto mb-2 mb-lg-0"></ul>
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li
+            class="nav-item cursor"
+            data-bs-toggle="modal"
+            data-bs-target="#newHero"
+          >
+            <span class="new-hero">Agregar Heroe</span>
+          </li>
+        </ul>
         <div class="d-flex">
-          <input
-            v-model="heroName"
-            class="form-control me-2"
-            type="search"
-            placeholder="Search"
-            aria-label="Search"
-          />
-          <button
-            @click="searchByName"
-            class="btn btn-outline-success"
-            :disabled="isHeroName"
-            type="button"
+          <ui-input v-model="heroName" placeholder="Nombre" />
+
+          <ui-btn
             data-bs-toggle="modal"
             data-bs-target="#currentHero"
+            @click="searchByName"
+            :disabled="isHeroName"
+            text="Buscar"
+            css-class="btn-outline-success"
           >
-            Search
-          </button>
+          </ui-btn>
         </div>
       </div>
     </div>
   </nav>
-  <modal-component>
-    <ui-card :hero="hero" class="modal-card" />
+
+  <modal-component id-modal="currentHero" :title-modal="hero.name">
+    <ui-card :hero="hero" />
+  </modal-component>
+  <modal-component id-modal="newHero" title-modal="Agregar Nuevo Heroe">
+    <div>Hola</div>
   </modal-component>
 </template>
 
@@ -36,6 +42,8 @@ import { ref, computed } from "vue";
 import store from "@/store";
 import ModalComponent from "@/components/utils/ModalComponent.vue";
 import UiCard from "@/components/utils/Card/UiCard.vue";
+import UiBtn from "@/components/utils/UiBtn.vue";
+import UiInput from "@/components/utils/UiInput.vue";
 
 const heroName = ref("");
 
@@ -49,6 +57,13 @@ function searchByName() {
 </script>
 
 <style lang="scss" scoped>
+.cursor {
+  cursor: pointer;
+}
+.new-hero {
+  color: #fff;
+  font-size: medium;
+}
 .modal-card {
   width: 80%;
 }

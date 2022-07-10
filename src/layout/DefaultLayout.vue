@@ -7,4 +7,4 @@
 import HeaderView from "@/views/HeaderView.vue";
 </script>
 
-<style></style>
+<style lang="scss" scoped></style>

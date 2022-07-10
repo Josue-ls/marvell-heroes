@@ -13,9 +13,9 @@
 
 <script lang="ts" setup>
 import { defineProps } from "vue";
+import { Hero } from "@/types/hero";
 import FrontSide from "./FronSide.vue";
 import BackSide from "./BackSide.vue";
-import { Hero } from "@/types/hero";
 
 const props = defineProps<{
   hero: Hero;

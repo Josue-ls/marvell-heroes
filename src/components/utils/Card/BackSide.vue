@@ -3,20 +3,29 @@
     <div class="card bg-dark card-back">
       <img :src="img" class="background-card" />
 
-      <div class="card-body">
+      <div class="card-body back-body">
         <h5 class="card-title">{{ props?.hero?.name }}</h5>
         <p class="card-text"></p>
       </div>
-      <div class="card-body">
+      <div class="card-body back-body">
         <p class="card-desc">{{ description }}</p>
+        <ui-btn
+          @click="setCurrentHero"
+          data-bs-toggle="modal"
+          data-bs-target="#updateHero"
+          text="Editar"
+          css-class="btn-light"
+        />
       </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
+import store from "@/store";
 import { Hero } from "@/types/hero";
-import { defineProps, computed } from "vue";
+import { computed, defineProps } from "vue";
+import UiBtn from "../UiBtn.vue";
 
 const props = defineProps<{
   hero: Hero;
@@ -30,6 +39,10 @@ const description = computed(() => {
   if (props.hero?.description.length === 0) return "";
   return `${props.hero?.description.substring(0, 300)}...`;
 });
+
+function setCurrentHero() {
+  store.commit("heroes/setHero", props.hero);
+}
 </script>
 
 <style lang="scss" scoped>
@@ -37,6 +50,11 @@ const description = computed(() => {
   position: relative;
   height: 100%;
   color: white;
+  z-index: 10;
+}
+
+.back-body {
+  z-index: 20;
 }
 .card-desc {
   text-align: justify;

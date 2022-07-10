@@ -43,6 +43,13 @@ export const heroes: Module<Heroes, unknown> = {
     setHero(state, payload) {
       state.currentHero = payload;
     },
+    setHeroById(state, payload) {
+      const heroList = [...state.data];
+      const index = heroList.map((hero) => hero.id).indexOf(payload.id);
+      console.log(index);
+      heroList.splice(index, 1, payload);
+      state.data = heroList;
+    },
   },
   actions: {
     async fetchHeroes({ commit }) {
@@ -51,7 +58,6 @@ export const heroes: Module<Heroes, unknown> = {
     },
     async fetchHeroByName({ commit }, name: string) {
       const res = await getHeroByName(name);
-      console.log(res);
       commit("setHero", res.data.results[0]);
     },
   },
