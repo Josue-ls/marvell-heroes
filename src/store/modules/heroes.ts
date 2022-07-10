@@ -46,9 +46,11 @@ export const heroes: Module<Heroes, unknown> = {
     setHeroById(state, payload) {
       const heroList = [...state.data];
       const index = heroList.map((hero) => hero.id).indexOf(payload.id);
-      console.log(index);
       heroList.splice(index, 1, payload);
       state.data = heroList;
+    },
+    setNewHero(state, payload) {
+      Object.assign(state.data, [...[payload], ...state.data]);
     },
   },
   actions: {

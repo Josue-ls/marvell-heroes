@@ -6,6 +6,7 @@
 
 <script lang="ts" setup>
 import DefaultLayout from "./layout/DefaultLayout.vue";
+import "animate.css";
 </script>
 
 <style>

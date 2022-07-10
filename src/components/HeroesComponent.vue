@@ -1,9 +1,9 @@
 <template>
   <div class="container margin-row">
     <template v-for="item in heroList" :key="item.id">
-      <div class="row">
+      <div class="row animate__animated animate__fadeInUp">
         <template v-for="hero in item.data" :key="hero.id">
-          <div class="col">
+          <div class="col-4">
             <ui-card :hero="hero" />
           </div>
         </template>
@@ -14,7 +14,7 @@
     </div>
   </div>
   <modal-component id-modal="updateHero" title-modal="Editar Heroe">
-    <form-heroes />
+    <form-heroes action="Editar" />
   </modal-component>
 </template>
 
@@ -37,10 +37,15 @@ const heroList = computed(() => {
   const array = store.getters["heroes/getHeroes"];
   let newArray: any = [];
   const arrayLength = array.length / 3;
-  for (let x = 0; x <= arrayLength - 1; x++) {
+  const newLenght =
+    arrayLength > Math.round(arrayLength)
+      ? Math.round(arrayLength) + 1
+      : arrayLength;
+  for (let x = 0; x <= newLenght - 1; x++) {
     newArray.push({ id: x + 1, data: [] });
     for (let y = 0; y <= 2; y++) {
-      newArray[x].data = [...newArray[x].data, ...[array[y + 3 * x]]];
+      if (array[y + 3 * x])
+        newArray[x].data = [...newArray[x].data, ...[array[y + 3 * x]]];
     }
   }
 

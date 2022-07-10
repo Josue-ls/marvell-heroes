@@ -1,6 +1,6 @@
 <template>
   <div class="row">
-    <div class="col-6">
+    <div class="col-6" :key="state.id">
       <ui-input
         css-class="mb-4"
         v-model="state.name"
@@ -22,7 +22,7 @@
 
       <ui-btn
         @click="updateHero"
-        text="Editar"
+        :text="props.action"
         css-class="btn-outline-primary"
         data-bs-dismiss="modal"
       />
@@ -36,12 +36,19 @@
 
 <script setup lang="ts">
 import store from "@/store";
-import { computed, reactive, watch } from "vue";
+import moment from "moment";
+import { computed, defineProps, reactive, watch } from "vue";
 import UiBtn from "./utils/UiBtn.vue";
 import UiInput from "./utils/UiInput.vue";
 import UiTextArea from "./utils/UiTextArea.vue";
+import { clearHero } from "./composables/clearCurrentHero";
+
+const props = defineProps<{
+  action: string;
+}>();
 
 const hero = computed(() => store.getters["heroes/getHero"]);
+const heroes = computed(() => store.getters["heroes/getHeroes"]);
 
 const state = reactive({
   id: 0,
@@ -49,7 +56,6 @@ const state = reactive({
   description: "",
   thumbnail: {},
   img: "",
-  selectedFile: null,
 });
 
 watch(hero, () => {
@@ -65,15 +71,7 @@ watch(
   () => {
     if (state.img.length > 0) {
       const extension = state.img.trim().split(".");
-      console.log(extension);
       const size = extension.length;
-      console.log(state.img.trim());
-      console.log(
-        state.img
-          .trim()
-          .substring(0, state.img.length - extension[size - 1].length - 1)
-      );
-      console.log(extension[size - 1]);
       state.thumbnail = {
         path: state.img
           .trim()
@@ -96,30 +94,34 @@ function verifyFields() {
   }
 }
 
-function updateHero() {
+function clearForm() {
+  Object.keys(state).forEach((key: string) => {
+    if (typeof state[key] === "string") state[key] = "";
+    if (typeof state[key] === "number") state[key] = 0;
+    if (typeof state[key] === "object") state[key] = {};
+  });
+  state.id += 1;
+}
+
+function Guardar() {
+  state.id = heroes.value.length + 1;
+  store.commit("heroes/setNewHero", {
+    ...hero.value,
+    ...state,
+    ...{ modified: moment().format("YYYY-MM-DD[T]HH:mm:ss[-0600]") },
+  });
+}
+
+function Editar() {
   verifyFields();
   store.commit("heroes/setHeroById", { ...hero.value, ...state });
-  store.commit("heroes/setHero", {
-    comics: {
-      available: 0,
-      collectionURI: "",
-      items: [],
-      returned: 0,
-    },
-    description: "",
-    events: { available: 0, collectionURI: "", items: [], returned: 0 },
-    id: 0,
-    modified: "",
-    name: "",
-    resourceURI: "",
-    series: { available: 0, collectionURI: "", items: [], returned: 0 },
-    stories: { available: 0, collectionURI: "", items: [], returned: 0 },
-    thumbnail: {
-      path: "",
-      extension: "",
-    },
-    urls: [],
-  });
+  clearHero(store);
+}
+
+function updateHero() {
+  props.action === "Guardar" && Guardar();
+  props.action === "Editar" && Editar();
+  clearForm();
 }
 </script>
 

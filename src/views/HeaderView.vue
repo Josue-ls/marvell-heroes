@@ -8,6 +8,7 @@
             class="nav-item cursor"
             data-bs-toggle="modal"
             data-bs-target="#newHero"
+            @click="clearCurrentHero"
           >
             <span class="new-hero">Agregar Heroe</span>
           </li>
@@ -30,20 +31,24 @@
   </nav>
 
   <modal-component id-modal="currentHero" :title-modal="hero.name">
-    <ui-card :hero="hero" />
+    <div class="card-by-hero">
+      <ui-card :hero="hero" />
+    </div>
   </modal-component>
   <modal-component id-modal="newHero" title-modal="Agregar Nuevo Heroe">
-    <div>Hola</div>
+    <form-heroes action="Guardar" />
   </modal-component>
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from "vue";
-import store from "@/store";
-import ModalComponent from "@/components/utils/ModalComponent.vue";
+import { clearHero } from "@/components/composables/clearCurrentHero";
+import FormHeroes from "@/components/FormHeroes.vue";
 import UiCard from "@/components/utils/Card/UiCard.vue";
+import ModalComponent from "@/components/utils/ModalComponent.vue";
 import UiBtn from "@/components/utils/UiBtn.vue";
 import UiInput from "@/components/utils/UiInput.vue";
+import store from "@/store";
+import { computed, ref } from "vue";
 
 const heroName = ref("");
 
@@ -53,6 +58,10 @@ const hero = computed(() => store.getters["heroes/getHero"]);
 
 function searchByName() {
   store.dispatch("heroes/fetchHeroByName", heroName.value);
+}
+
+function clearCurrentHero() {
+  clearHero(store);
 }
 </script>
 
@@ -66,5 +75,9 @@ function searchByName() {
 }
 .modal-card {
   width: 80%;
+}
+
+.card-by-hero {
+  padding: 0 10rem;
 }
 </style>
