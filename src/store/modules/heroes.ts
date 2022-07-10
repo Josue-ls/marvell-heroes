@@ -22,5 +22,9 @@ export const heroes: Module<Heroes, unknown> = {
       const res = await getHeroes();
       commit("setHeroes", res.data.results);
     },
+    async fetchHero({ commit }) {
+      const res = await getHeroes();
+      commit("setHeroes", res.data.results);
+    },
   },
 };

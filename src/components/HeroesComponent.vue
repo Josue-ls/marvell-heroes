@@ -1,5 +1,5 @@
 <template>
-  <div class="container margin-row">
+  <div class="container margin-row" ref="scrollComponent">
     <template v-for="item in heroList" :key="item.id">
       <div class="row">
         <template v-for="hero in item.data" :key="hero.id">
@@ -13,12 +13,13 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, onMounted } from "vue";
 import store from "@/store";
+import { computed, onMounted, watch } from "vue";
 import UiCard from "./utils/Card/UiCard.vue";
 
 onMounted(() => {
-  store.dispatch("heroes/fetchHeroes");
+  fetchHeroes();
+  infiniteScroll();
 });
 
 const heroList = computed(() => {
@@ -34,6 +35,26 @@ const heroList = computed(() => {
 
   return newArray;
 });
+
+watch(scroll, () => {
+  console.log(scroll);
+});
+
+function fetchHeroes() {
+  store.dispatch("heroes/fetchHeroes");
+}
+
+function infiniteScroll() {
+  window.onscroll = () => {
+    let bottomOfWindow =
+      Math.round(document.documentElement.scrollTop + window.innerHeight) ===
+      document.documentElement.offsetHeight;
+
+    if (bottomOfWindow) {
+      fetchHeroes();
+    }
+  };
+}
 </script>
 
 <style lang="scss" scoped>
