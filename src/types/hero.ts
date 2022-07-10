@@ -1,5 +1,6 @@
 export interface Heroes {
   data: Array<Hero>;
+  currentHero?: Hero;
 }
 
 export interface Hero {

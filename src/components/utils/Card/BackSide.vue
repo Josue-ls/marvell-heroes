@@ -4,7 +4,7 @@
       <img :src="img" class="background-card" />
 
       <div class="card-body">
-        <h5 class="card-title">{{ props.hero.name }}</h5>
+        <h5 class="card-title">{{ props?.hero?.name }}</h5>
         <p class="card-text"></p>
       </div>
       <div class="card-body">
@@ -23,12 +23,12 @@ const props = defineProps<{
 }>();
 
 const img = computed(
-  () => `${props.hero.thumbnail.path}.${props.hero.thumbnail.extension}`
+  () => `${props.hero?.thumbnail.path}.${props.hero?.thumbnail.extension}`
 );
 
 const description = computed(() => {
-  if (props.hero.description.length === 0) return "";
-  return `${props.hero.description.substring(0, 300)}...`;
+  if (props.hero?.description.length === 0) return "";
+  return `${props.hero?.description.substring(0, 300)}...`;
 });
 </script>
 

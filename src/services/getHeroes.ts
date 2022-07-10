@@ -15,11 +15,12 @@ export const getHeroes = async () => {
   const { data } = await axios.get(url);
   return data;
 };
+
 export const getHeroByName = async (name: string) => {
   offSet += 6;
   const timeStamp = new Date().getTime();
   const hash = getHash(timeStamp, PRIVATE_KEY, PUBLIC_KEY);
-  const url = `${BASE_URL}/v1/public/characters?name=${name}=${timeStamp}&apikey=${PUBLIC_KEY}&hash=${hash}`;
+  const url = `${BASE_URL}/v1/public/characters?name=${name}&ts=${timeStamp}&apikey=${PUBLIC_KEY}&hash=${hash}`;
 
   const { data } = await axios.get(url);
   return data;

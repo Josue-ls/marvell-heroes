@@ -14,7 +14,7 @@
 
 <script lang="ts" setup>
 import store from "@/store";
-import { computed, onMounted, watch } from "vue";
+import { computed, onMounted } from "vue";
 import UiCard from "./utils/Card/UiCard.vue";
 
 onMounted(() => {
@@ -34,10 +34,6 @@ const heroList = computed(() => {
   }
 
   return newArray;
-});
-
-watch(scroll, () => {
-  console.log(scroll);
 });
 
 function fetchHeroes() {
