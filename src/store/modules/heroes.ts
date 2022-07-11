@@ -60,7 +60,7 @@ export const heroes: Module<Heroes, unknown> = {
     },
     async fetchHeroByName({ commit }, name: string) {
       const res = await getHeroByName(name);
-      commit("setHero", res.data.results[0]);
+      if (res.data.results[0]) commit("setHero", res.data.results[0]);
     },
   },
 };

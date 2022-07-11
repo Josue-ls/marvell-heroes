@@ -9,8 +9,7 @@ declare module "md5" {
   import VueSignaturePad from "md5";
   export default VueSignaturePad;
 }
-
-declare module "vue-infinite-loading" {
-  import VueSignaturePad from "vue-infinite-loading";
+declare module "@meforma/vue-toaster" {
+  import VueSignaturePad from "@meforma/vue-toasterp";
   export default VueSignaturePad;
 }

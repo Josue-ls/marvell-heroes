@@ -35,13 +35,15 @@
 </template>
 
 <script setup lang="ts">
-import store from "@/store";
-import moment from "moment";
 import { computed, defineProps, reactive, watch } from "vue";
+import moment from "moment";
+import store from "@/store";
 import UiBtn from "./utils/UiBtn.vue";
 import UiInput from "./utils/UiInput.vue";
 import UiTextArea from "./utils/UiTextArea.vue";
 import { clearHero } from "./composables/clearCurrentHero";
+import { Hero } from "../types/hero";
+import Swal from "sweetalert2";
 
 const props = defineProps<{
   action: string;
@@ -64,6 +66,9 @@ watch(hero, () => {
   state.description = hero.value.description;
   state.thumbnail = hero.value.thumbnail;
   state.img = `${hero.value.thumbnail.path}.${hero.value.thumbnail.extension}`;
+  if (state.img.length === 1)
+    state.img =
+      "http://i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available.jpg";
 });
 
 watch(
@@ -104,12 +109,25 @@ function clearForm() {
 }
 
 function Guardar() {
-  state.id = heroes.value.length + 1;
-  store.commit("heroes/setNewHero", {
-    ...hero.value,
-    ...state,
-    ...{ modified: moment().format("YYYY-MM-DD[T]HH:mm:ss[-0600]") },
-  });
+  if (!heroes.value.find((hero: Hero) => hero.name === state.name)) {
+    state.id = heroes.value.length + 1;
+    store.commit("heroes/setNewHero", {
+      ...hero.value,
+      ...state,
+      ...{ modified: moment().format("YYYY-MM-DD[T]HH:mm:ss[-0600]") },
+    });
+    Swal.fire({
+      icon: "success",
+      title: "Correcto",
+      text: "Registro almacenado correctamente",
+    });
+  } else {
+    Swal.fire({
+      icon: "warning",
+      title: "Aviso",
+      text: "Registro ya existe",
+    });
+  }
 }
 
 function Editar() {
@@ -122,6 +140,11 @@ function updateHero() {
   props.action === "Guardar" && Guardar();
   props.action === "Editar" && Editar();
   clearForm();
+  Swal.fire({
+    icon: "success",
+    title: "Correcto",
+    text: "Registro actualizado correctamente",
+  });
 }
 </script>
 

@@ -32,7 +32,14 @@
 
   <modal-component id-modal="currentHero" :title-modal="hero.name">
     <div class="card-by-hero">
-      <ui-card :hero="hero" />
+      <ui-card v-if="hero.id" :hero="hero" :key="hero.id" />
+      <div class="jumbotron" v-else>
+        <h3 class="display-4">Heroe no encontrado :(</h3>
+        <p class="lead">
+          El heroe que buscas no se encuentra en nuestra lista, quizas sea de
+          otro multiverso o del universo DC.
+        </p>
+      </div>
     </div>
   </modal-component>
   <modal-component id-modal="newHero" title-modal="Agregar Nuevo Heroe">
@@ -53,10 +60,10 @@ import { computed, ref } from "vue";
 const heroName = ref("");
 
 const isHeroName = computed(() => !(heroName.value.length > 0));
-
 const hero = computed(() => store.getters["heroes/getHero"]);
 
 function searchByName() {
+  clearHero(store);
   store.dispatch("heroes/fetchHeroByName", heroName.value);
 }
 
